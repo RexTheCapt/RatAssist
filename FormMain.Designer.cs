@@ -43,12 +43,14 @@
             this.groupBoxRatInfo = new System.Windows.Forms.GroupBox();
             this.buttonSetTarget = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.textBoxTargetSystem = new System.Windows.Forms.TextBox();
+            this.numericUpDownJumpRange = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxCurrentSystem = new System.Windows.Forms.TextBox();
             this.groupBoxSpansh = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButtonDisable = new System.Windows.Forms.RadioButton();
             this.radioButtonUseUser = new System.Windows.Forms.RadioButton();
@@ -59,12 +61,17 @@
             this.columnHeaderLeft = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderJumps = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderNeutron = new System.Windows.Forms.ColumnHeader();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemTopMost = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCaseNR)).BeginInit();
             this.groupBoxCaseInfo.SuspendLayout();
             this.groupBoxRatInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJumpRange)).BeginInit();
             this.groupBoxSpansh.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -75,7 +82,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Set case";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.ButtonSetCase_Click);
             // 
             // textBoxClientName
             // 
@@ -134,6 +141,7 @@
             this.checkBoxCodeRed.TabIndex = 7;
             this.checkBoxCodeRed.Text = "Code Red";
             this.checkBoxCodeRed.UseVisualStyleBackColor = true;
+            this.checkBoxCodeRed.CheckedChanged += new System.EventHandler(this.CheckBoxCodeRed_CheckedChanged);
             // 
             // label4
             // 
@@ -165,7 +173,7 @@
             this.groupBoxCaseInfo.Controls.Add(this.label3);
             this.groupBoxCaseInfo.Controls.Add(this.label2);
             this.groupBoxCaseInfo.Controls.Add(this.textBoxPlatform);
-            this.groupBoxCaseInfo.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxCaseInfo.Location = new System.Drawing.Point(5, 31);
             this.groupBoxCaseInfo.Name = "groupBoxCaseInfo";
             this.groupBoxCaseInfo.Size = new System.Drawing.Size(216, 219);
             this.groupBoxCaseInfo.TabIndex = 10;
@@ -180,18 +188,19 @@
             this.buttonClearCase.TabIndex = 10;
             this.buttonClearCase.Text = "Clear case";
             this.buttonClearCase.UseVisualStyleBackColor = true;
+            this.buttonClearCase.Click += new System.EventHandler(this.ButtonClearCase_Click);
             // 
             // groupBoxRatInfo
             // 
             this.groupBoxRatInfo.BackColor = System.Drawing.Color.Gray;
             this.groupBoxRatInfo.Controls.Add(this.buttonSetTarget);
             this.groupBoxRatInfo.Controls.Add(this.label7);
-            this.groupBoxRatInfo.Controls.Add(this.textBox1);
-            this.groupBoxRatInfo.Controls.Add(this.numericUpDown1);
+            this.groupBoxRatInfo.Controls.Add(this.textBoxTargetSystem);
+            this.groupBoxRatInfo.Controls.Add(this.numericUpDownJumpRange);
             this.groupBoxRatInfo.Controls.Add(this.label6);
             this.groupBoxRatInfo.Controls.Add(this.label5);
             this.groupBoxRatInfo.Controls.Add(this.textBoxCurrentSystem);
-            this.groupBoxRatInfo.Location = new System.Drawing.Point(12, 237);
+            this.groupBoxRatInfo.Location = new System.Drawing.Point(5, 256);
             this.groupBoxRatInfo.Name = "groupBoxRatInfo";
             this.groupBoxRatInfo.Size = new System.Drawing.Size(216, 144);
             this.groupBoxRatInfo.TabIndex = 11;
@@ -216,31 +225,31 @@
             this.label7.TabIndex = 13;
             this.label7.Text = "Target sys:";
             // 
-            // textBox1
+            // textBoxTargetSystem
             // 
-            this.textBox1.Location = new System.Drawing.Point(86, 80);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(120, 23);
-            this.textBox1.TabIndex = 12;
+            this.textBoxTargetSystem.Location = new System.Drawing.Point(86, 80);
+            this.textBoxTargetSystem.Name = "textBoxTargetSystem";
+            this.textBoxTargetSystem.Size = new System.Drawing.Size(120, 23);
+            this.textBoxTargetSystem.TabIndex = 12;
             // 
-            // numericUpDown1
+            // numericUpDownJumpRange
             // 
-            this.numericUpDown1.DecimalPlaces = 2;
-            this.numericUpDown1.Location = new System.Drawing.Point(86, 51);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.numericUpDownJumpRange.DecimalPlaces = 2;
+            this.numericUpDownJumpRange.Location = new System.Drawing.Point(86, 51);
+            this.numericUpDownJumpRange.Maximum = new decimal(new int[] {
             500,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.numericUpDownJumpRange.Minimum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 23);
-            this.numericUpDown1.TabIndex = 10;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.numericUpDownJumpRange.Name = "numericUpDownJumpRange";
+            this.numericUpDownJumpRange.Size = new System.Drawing.Size(120, 23);
+            this.numericUpDownJumpRange.TabIndex = 10;
+            this.numericUpDownJumpRange.Value = new decimal(new int[] {
             10,
             0,
             0,
@@ -270,18 +279,38 @@
             this.textBoxCurrentSystem.Name = "textBoxCurrentSystem";
             this.textBoxCurrentSystem.Size = new System.Drawing.Size(120, 23);
             this.textBoxCurrentSystem.TabIndex = 10;
+            this.textBoxCurrentSystem.TextChanged += new System.EventHandler(this.UpdateTravelPath);
             // 
             // groupBoxSpansh
             // 
             this.groupBoxSpansh.BackColor = System.Drawing.Color.Gray;
+            this.groupBoxSpansh.Controls.Add(this.label8);
+            this.groupBoxSpansh.Controls.Add(this.pictureBox1);
             this.groupBoxSpansh.Controls.Add(this.groupBox1);
             this.groupBoxSpansh.Controls.Add(this.listView1);
-            this.groupBoxSpansh.Location = new System.Drawing.Point(234, 10);
+            this.groupBoxSpansh.Location = new System.Drawing.Point(227, 29);
             this.groupBoxSpansh.Name = "groupBoxSpansh";
-            this.groupBoxSpansh.Size = new System.Drawing.Size(397, 367);
+            this.groupBoxSpansh.Size = new System.Drawing.Size(397, 371);
             this.groupBoxSpansh.TabIndex = 12;
             this.groupBoxSpansh.TabStop = false;
             this.groupBoxSpansh.Text = "Spansh";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(22, 325);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(112, 15);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "Calculating jumps...";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(16, 319);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(365, 29);
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
             // 
             // groupBox1
             // 
@@ -367,15 +396,42 @@
             // 
             this.columnHeaderNeutron.Text = "Neutron";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemSettings});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(627, 24);
+            this.menuStrip1.TabIndex = 14;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItemSettings
+            // 
+            this.toolStripMenuItemSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemTopMost});
+            this.toolStripMenuItemSettings.Name = "toolStripMenuItemSettings";
+            this.toolStripMenuItemSettings.Size = new System.Drawing.Size(61, 20);
+            this.toolStripMenuItemSettings.Text = "Settings";
+            // 
+            // toolStripMenuItemTopMost
+            // 
+            this.toolStripMenuItemTopMost.Name = "toolStripMenuItemTopMost";
+            this.toolStripMenuItemTopMost.Size = new System.Drawing.Size(123, 22);
+            this.toolStripMenuItemTopMost.Text = "Top most";
+            this.toolStripMenuItemTopMost.Click += new System.EventHandler(this.TopMost_CheckedChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(642, 389);
+            this.ClientSize = new System.Drawing.Size(627, 404);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBoxSpansh);
             this.Controls.Add(this.groupBoxRatInfo);
             this.Controls.Add(this.groupBoxCaseInfo);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
             this.Text = "Rat Assist";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCaseNR)).EndInit();
@@ -383,11 +439,16 @@
             this.groupBoxCaseInfo.PerformLayout();
             this.groupBoxRatInfo.ResumeLayout(false);
             this.groupBoxRatInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJumpRange)).EndInit();
             this.groupBoxSpansh.ResumeLayout(false);
+            this.groupBoxSpansh.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -407,8 +468,8 @@
         private GroupBox groupBoxRatInfo;
         private Button buttonClearCase;
         private Label label7;
-        private TextBox textBox1;
-        private NumericUpDown numericUpDown1;
+        private TextBox textBoxTargetSystem;
+        private NumericUpDown numericUpDownJumpRange;
         private Label label6;
         private Label label5;
         private TextBox textBoxCurrentSystem;
@@ -424,5 +485,10 @@
         private ColumnHeader columnHeaderLeft;
         private ColumnHeader columnHeaderJumps;
         private ColumnHeader columnHeaderNeutron;
+        private Label label8;
+        private PictureBox pictureBox1;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItemSettings;
+        private ToolStripMenuItem toolStripMenuItemTopMost;
     }
 }
