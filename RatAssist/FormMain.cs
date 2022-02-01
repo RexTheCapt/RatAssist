@@ -12,7 +12,8 @@ namespace RatAssist
         private MessageJumpCalculation mjc;
         internal JournalScanner JournalScanner { get; private set; }
         public static readonly string JournalPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\Saved Games\\Frontier Developments\\Elite Dangerous";
-        private readonly System.Windows.Forms.Timer _delayedUpdate;
+        private readonly System.Windows.Forms.Timer delayedUpdate;
+        private readonly System.Windows.Forms.Timer scanJournal;
 
         public FormMain()
         {
@@ -20,17 +21,17 @@ namespace RatAssist
 
             mjc = new()
             {
-                Background = pictureBox1,
-                Foreground = label8,
+                Background = panelMessageBackground,
+                Foreground = labelMessageForeground,
                 Form = this
             };
 
-            _delayedUpdate = new System.Windows.Forms.Timer()
+            delayedUpdate = new System.Windows.Forms.Timer()
             {
                 Enabled = false,
                 Interval = 1000,
             };
-            _delayedUpdate.Tick += DelayedUpdateTick;
+            delayedUpdate.Tick += DelayedUpdateTick;
 
             #region Setup journal scanner
             JournalScanner = new JournalScanner(JournalPath);
@@ -59,46 +60,77 @@ namespace RatAssist
             JournalScanner.LoadoutHandler += JournalScanner_LoadoutHandler;
             #endregion
 
+            scanJournal = new()
+            {
+                Enabled = true,
+                Interval = 100
+            };
+            scanJournal.Tick += ScanJournal_Tick;
+
             mjc.Hide();
+        }
+
+        private void ScanJournal_Tick(object? sender, EventArgs e)
+        {
+            JournalScanner.TimerScan(true);
         }
 
         private void ButtonSetCase_Click(object sender, EventArgs e)
         {
             string[] splits = Clipboard.GetText().Split('–');
 
-            for (int i = 0; i < splits.Length; i++)
+            if (splits.Length != 1)
             {
-                string tmpS = splits[i];
-                string[] tmpA;
-                switch (i)
+                for (int i = 0; i < splits.Length; i++)
                 {
-                    case 0:
-                        tmpS = tmpS.Replace("RATSIGNAL Case #", "").Trim();
-                        tmpA = tmpS.Split(' ');
+                    string tmpS = splits[i];
+                    string[] tmpA;
+                    switch (i)
+                    {
+                        case 0:
+                            tmpS = tmpS.Replace("RATSIGNAL Case #", "").Trim();
+                            tmpA = tmpS.Split(' ');
 
-                        if (int.TryParse(tmpA[0].Trim(), out int cn))
-                            numericUpDownCaseNR.Value = cn;
-                        else
-                            numericUpDownCaseNR.Value = -1;
+                            if (int.TryParse(tmpA[0].Trim(), out int cn))
+                                numericUpDownCaseNR.Value = cn;
+                            else
+                                numericUpDownCaseNR.Value = -1;
 
-                        textBoxPlatform.Text = tmpA[1].Trim();
-                        checkBoxCodeRed.Checked = tmpA.Length > 2;
-                        break;
-                    case 1:
-                        textBoxClientName.Text = tmpS.Replace("CMDR", "").Trim();
-                        break;
-                    case 2:
-                        tmpA = tmpS.Split('\"');
-                        textBoxSystemName.Text = tmpA[1].Trim();
-                        //landMark = tmpA[2].Replace("(","").Replace(")", "").Trim();
-                        break;
+                            textBoxPlatform.Text = tmpA[1].Trim();
+                            checkBoxCodeRed.Checked = tmpA.Length > 2;
+                            break;
+                        case 1:
+                            textBoxClientName.Text = tmpS.Replace("CMDR", "").Trim();
+                            break;
+                        case 2:
+                            tmpA = tmpS.Split('\"');
+                            textBoxClientSystemName.Text = tmpA[1].Trim();
+                            //landMark = tmpA[2].Replace("(","").Replace(")", "").Trim();
+                            break;
+                    }
                 }
             }
+            else
+            {
+                splits = Clipboard.GetText().Replace(" - ", "|").Split('|');
+
+                textBoxClientName.Text = splits[0].Split(':')[1].Trim();
+                textBoxClientSystemName.Text = splits[1].Split(':')[1].Trim();
+                textBoxPlatform.Text = splits[2].Split(':')[1].Trim();
+                checkBoxCodeRed.Checked = splits[3].Split(':')[1].Trim().Equals("NOT OK");
+                string language = splits[4].Split(':')[1].Trim();
+                string ircNick;
+
+                if (splits.Length > 5)
+                    ircNick = splits[5].Split(':')[1].Trim();
+            }
+
+            ButtonSetClientTargetSystem(sender, e);
         }
 
         private void ButtonClearCase_Click(object sender, EventArgs e)
         {
-            textBoxSystemName.Text = "";
+            textBoxClientSystemName.Text = "";
             textBoxClientName.Text = "";
             textBoxPlatform.Text = "";
             numericUpDownCaseNR.Value = -1;
@@ -192,7 +224,16 @@ namespace RatAssist
                 if (string.IsNullOrEmpty(textBoxTargetSystem.Text) || string.IsNullOrWhiteSpace(textBoxTargetSystem.Text) || _ranUpdateInSystem.Equals(textBoxCurrentSystem.Text))
                     return;
 
-            ButtonStartRoute_Click(this, new EventArgs());
+            RadioButton rb;
+
+            if (radioButtonDisable.Checked)
+                return;
+            else if (radioButtonUseClient.Checked)
+                RadioSetRouteMode(radioButtonUseClient, new EventArgs());
+            else if (radioButtonUseUser.Checked)
+                RadioSetRouteMode(radioButtonUseUser, new EventArgs());
+            else
+                throw new Exception("Invalid route setting");
 
             _ranUpdateInSystem = textBoxCurrentSystem.Text;
         }
@@ -608,7 +649,7 @@ namespace RatAssist
                 return;
 
             mjc.Show();
-            _delayedUpdate.Enabled = false;
+            delayedUpdate.Enabled = false;
             JToken jToken;
             try
             {
@@ -627,7 +668,7 @@ namespace RatAssist
                 {
                     textBoxCurrentSystem.BackColor = Color.Green;
                     textBoxCurrentSystem.ForeColor = Color.White;
-                    _delayedUpdate.Enabled = true;
+                    delayedUpdate.Enabled = true;
                     return;
                 }
                 else
@@ -708,6 +749,117 @@ namespace RatAssist
         private void DelayedUpdateTick(object? sender, EventArgs e)
         {
             ButtonStartRoute_Click(sender, e);
+        }
+
+        private void RadioSetRouteMode(object sender, EventArgs e)
+        {
+            if (radioButtonDisable.Checked)
+                return;
+
+            RadioButton rb = (RadioButton)sender;
+            string tag = (string)rb.Tag;
+            string targetSystem;
+
+            if (tag.Equals("Client"))
+                targetSystem = textBoxClientSystemName.Text;
+            else if (tag.Equals("User"))
+                targetSystem = textBoxTargetSystem.Text;
+            else
+                throw new Exception("Unknown radio tag");
+
+            JToken jToken;
+            mjc.Show();
+
+            try
+            {
+                jToken = NeutronRouterAPI.GetNewRoute(textBoxCurrentSystem.Text, targetSystem, numericUpDownJumpRange.Value, 60);
+            }
+            catch (Exception ex)
+            {
+                mjc.Error();
+                Type t = ex.GetType();
+
+                if (t == typeof(InvalidEndSystemException))
+                {
+                    MessageBox.Show("Invalid system", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else if (t == typeof(InvalidStartSystemException))
+                {
+                    //textBoxCurrentSystem.BackColor = Color.Green;
+                    //textBoxCurrentSystem.ForeColor = Color.White;
+                    delayedUpdate.Enabled = true;
+                    return;
+                }
+                else
+                    //throw;
+                    return;
+            }
+
+            listView1.Items.Clear();
+            bool skipFirst = true;
+            bool nextRouteCopied = false;
+            uint totalJumps = 0;
+            decimal firstDistanceLeft = 0;
+            JArray list = jToken.Value<JArray>("system_jumps") ?? new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                JObject j = (JObject)list[i];
+                totalJumps += j.Value<uint>("jumps");
+
+                if (skipFirst)
+                {
+                    skipFirst = false;
+                    firstDistanceLeft = j.Value<decimal>("distance_left");
+                    continue;
+                }
+
+                string[] subItems = new string[]
+                {
+                    j.Value<string>("system"),
+                    MakeNumberSmaller(j.Value<decimal>("distance_jumped")),
+                    MakeNumberSmaller(j.Value<decimal>("distance_left")),
+                    j.Value<string>("jumps"),
+                    j.Value<string>("neutron_star")
+                };
+
+                ListViewItem lvi = new ListViewItem(subItems);
+                //if ((!nextRouteCopied && i == list.Count - 1) || (!nextRouteCopied && firstDistanceLeft - j.Value<decimal>("distance_left") > numericUpDownJumpRange.Value * 4))
+                if (!nextRouteCopied)
+                {
+                    Clipboard.SetText(subItems[0]);
+                    nextRouteCopied = true;
+                    lvi.BackColor = Color.Green;
+                    lvi.ForeColor = Color.White;
+                }
+
+                //if (copySecond)
+                //{
+                //    Clipboard.SetText(subItems[0]);
+                //    copySecond = false;
+                //}
+
+                ListViewItem listViewItem = listView1.Items.Add(lvi);
+                listViewItem.Tag = j;
+            }
+            mjc.Hide();
+        }
+
+        private void RadioDisableRoute(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonSetUserSystem(object sender, EventArgs e)
+        {
+            radioButtonUseUser.Checked = true;
+            RadioSetRouteMode(radioButtonUseUser, new EventArgs());
+        }
+
+        private void ButtonSetClientTargetSystem(object sender, EventArgs e)
+        {
+            radioButtonUseClient.Checked = true;
+            RadioSetRouteMode(radioButtonUseClient, new EventArgs());
         }
     }
 }

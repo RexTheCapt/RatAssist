@@ -37,11 +37,12 @@
             this.textBoxPlatform = new System.Windows.Forms.TextBox();
             this.checkBoxCodeRed = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBoxSystemName = new System.Windows.Forms.TextBox();
+            this.textBoxClientSystemName = new System.Windows.Forms.TextBox();
             this.groupBoxCaseInfo = new System.Windows.Forms.GroupBox();
+            this.buttonSetClientTargetSystem = new System.Windows.Forms.Button();
             this.buttonClearCase = new System.Windows.Forms.Button();
             this.groupBoxRatInfo = new System.Windows.Forms.GroupBox();
-            this.buttonSetTarget = new System.Windows.Forms.Button();
+            this.buttonSetUserSystem = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxTargetSystem = new System.Windows.Forms.TextBox();
             this.numericUpDownJumpRange = new System.Windows.Forms.NumericUpDown();
@@ -49,8 +50,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxCurrentSystem = new System.Windows.Forms.TextBox();
             this.groupBoxSpansh = new System.Windows.Forms.GroupBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panelMessageBackground = new System.Windows.Forms.Panel();
+            this.labelMessageForeground = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioButtonDisable = new System.Windows.Forms.RadioButton();
             this.radioButtonUseUser = new System.Windows.Forms.RadioButton();
@@ -69,7 +70,7 @@
             this.groupBoxRatInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJumpRange)).BeginInit();
             this.groupBoxSpansh.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panelMessageBackground.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -152,21 +153,22 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "System name:";
             // 
-            // textBoxSystemName
+            // textBoxClientSystemName
             // 
-            this.textBoxSystemName.Location = new System.Drawing.Point(86, 80);
-            this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.Size = new System.Drawing.Size(120, 23);
-            this.textBoxSystemName.TabIndex = 8;
+            this.textBoxClientSystemName.Location = new System.Drawing.Point(86, 80);
+            this.textBoxClientSystemName.Name = "textBoxClientSystemName";
+            this.textBoxClientSystemName.Size = new System.Drawing.Size(120, 23);
+            this.textBoxClientSystemName.TabIndex = 8;
             // 
             // groupBoxCaseInfo
             // 
             this.groupBoxCaseInfo.BackColor = System.Drawing.Color.Gray;
+            this.groupBoxCaseInfo.Controls.Add(this.buttonSetClientTargetSystem);
             this.groupBoxCaseInfo.Controls.Add(this.buttonClearCase);
             this.groupBoxCaseInfo.Controls.Add(this.button1);
             this.groupBoxCaseInfo.Controls.Add(this.label4);
             this.groupBoxCaseInfo.Controls.Add(this.textBoxClientName);
-            this.groupBoxCaseInfo.Controls.Add(this.textBoxSystemName);
+            this.groupBoxCaseInfo.Controls.Add(this.textBoxClientSystemName);
             this.groupBoxCaseInfo.Controls.Add(this.label1);
             this.groupBoxCaseInfo.Controls.Add(this.checkBoxCodeRed);
             this.groupBoxCaseInfo.Controls.Add(this.numericUpDownCaseNR);
@@ -175,10 +177,20 @@
             this.groupBoxCaseInfo.Controls.Add(this.textBoxPlatform);
             this.groupBoxCaseInfo.Location = new System.Drawing.Point(5, 31);
             this.groupBoxCaseInfo.Name = "groupBoxCaseInfo";
-            this.groupBoxCaseInfo.Size = new System.Drawing.Size(216, 219);
+            this.groupBoxCaseInfo.Size = new System.Drawing.Size(216, 252);
             this.groupBoxCaseInfo.TabIndex = 10;
             this.groupBoxCaseInfo.TabStop = false;
             this.groupBoxCaseInfo.Text = "Case info";
+            // 
+            // buttonSetClientTargetSystem
+            // 
+            this.buttonSetClientTargetSystem.Location = new System.Drawing.Point(6, 221);
+            this.buttonSetClientTargetSystem.Name = "buttonSetClientTargetSystem";
+            this.buttonSetClientTargetSystem.Size = new System.Drawing.Size(200, 23);
+            this.buttonSetClientTargetSystem.TabIndex = 11;
+            this.buttonSetClientTargetSystem.Text = "Set target system";
+            this.buttonSetClientTargetSystem.UseVisualStyleBackColor = true;
+            this.buttonSetClientTargetSystem.Click += new System.EventHandler(this.ButtonSetClientTargetSystem);
             // 
             // buttonClearCase
             // 
@@ -193,28 +205,29 @@
             // groupBoxRatInfo
             // 
             this.groupBoxRatInfo.BackColor = System.Drawing.Color.Gray;
-            this.groupBoxRatInfo.Controls.Add(this.buttonSetTarget);
+            this.groupBoxRatInfo.Controls.Add(this.buttonSetUserSystem);
             this.groupBoxRatInfo.Controls.Add(this.label7);
             this.groupBoxRatInfo.Controls.Add(this.textBoxTargetSystem);
             this.groupBoxRatInfo.Controls.Add(this.numericUpDownJumpRange);
             this.groupBoxRatInfo.Controls.Add(this.label6);
             this.groupBoxRatInfo.Controls.Add(this.label5);
             this.groupBoxRatInfo.Controls.Add(this.textBoxCurrentSystem);
-            this.groupBoxRatInfo.Location = new System.Drawing.Point(5, 256);
+            this.groupBoxRatInfo.Location = new System.Drawing.Point(5, 289);
             this.groupBoxRatInfo.Name = "groupBoxRatInfo";
-            this.groupBoxRatInfo.Size = new System.Drawing.Size(216, 144);
+            this.groupBoxRatInfo.Size = new System.Drawing.Size(216, 140);
             this.groupBoxRatInfo.TabIndex = 11;
             this.groupBoxRatInfo.TabStop = false;
             this.groupBoxRatInfo.Text = "User info";
             // 
-            // buttonSetTarget
+            // buttonSetUserSystem
             // 
-            this.buttonSetTarget.Location = new System.Drawing.Point(6, 109);
-            this.buttonSetTarget.Name = "buttonSetTarget";
-            this.buttonSetTarget.Size = new System.Drawing.Size(200, 23);
-            this.buttonSetTarget.TabIndex = 12;
-            this.buttonSetTarget.Text = "Set target";
-            this.buttonSetTarget.UseVisualStyleBackColor = true;
+            this.buttonSetUserSystem.Location = new System.Drawing.Point(6, 109);
+            this.buttonSetUserSystem.Name = "buttonSetUserSystem";
+            this.buttonSetUserSystem.Size = new System.Drawing.Size(200, 23);
+            this.buttonSetUserSystem.TabIndex = 12;
+            this.buttonSetUserSystem.Text = "Set target system";
+            this.buttonSetUserSystem.UseVisualStyleBackColor = true;
+            this.buttonSetUserSystem.Click += new System.EventHandler(this.ButtonSetUserSystem);
             // 
             // label7
             // 
@@ -277,6 +290,7 @@
             // 
             this.textBoxCurrentSystem.Location = new System.Drawing.Point(86, 22);
             this.textBoxCurrentSystem.Name = "textBoxCurrentSystem";
+            this.textBoxCurrentSystem.ReadOnly = true;
             this.textBoxCurrentSystem.Size = new System.Drawing.Size(120, 23);
             this.textBoxCurrentSystem.TabIndex = 10;
             this.textBoxCurrentSystem.TextChanged += new System.EventHandler(this.UpdateTravelPath);
@@ -284,33 +298,33 @@
             // groupBoxSpansh
             // 
             this.groupBoxSpansh.BackColor = System.Drawing.Color.Gray;
-            this.groupBoxSpansh.Controls.Add(this.label8);
-            this.groupBoxSpansh.Controls.Add(this.pictureBox1);
+            this.groupBoxSpansh.Controls.Add(this.panelMessageBackground);
             this.groupBoxSpansh.Controls.Add(this.groupBox1);
             this.groupBoxSpansh.Controls.Add(this.listView1);
             this.groupBoxSpansh.Location = new System.Drawing.Point(227, 29);
             this.groupBoxSpansh.Name = "groupBoxSpansh";
-            this.groupBoxSpansh.Size = new System.Drawing.Size(397, 371);
+            this.groupBoxSpansh.Size = new System.Drawing.Size(397, 400);
             this.groupBoxSpansh.TabIndex = 12;
             this.groupBoxSpansh.TabStop = false;
             this.groupBoxSpansh.Text = "Spansh";
             // 
-            // label8
+            // panelMessageBackground
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(22, 325);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(112, 15);
-            this.label8.TabIndex = 10;
-            this.label8.Text = "Calculating jumps...";
+            this.panelMessageBackground.BackColor = System.Drawing.Color.Gray;
+            this.panelMessageBackground.Controls.Add(this.labelMessageForeground);
+            this.panelMessageBackground.Location = new System.Drawing.Point(16, 351);
+            this.panelMessageBackground.Name = "panelMessageBackground";
+            this.panelMessageBackground.Size = new System.Drawing.Size(365, 29);
+            this.panelMessageBackground.TabIndex = 15;
             // 
-            // pictureBox1
+            // labelMessageForeground
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(16, 319);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(365, 29);
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
+            this.labelMessageForeground.AutoSize = true;
+            this.labelMessageForeground.Location = new System.Drawing.Point(8, 7);
+            this.labelMessageForeground.Name = "labelMessageForeground";
+            this.labelMessageForeground.Size = new System.Drawing.Size(112, 15);
+            this.labelMessageForeground.TabIndex = 10;
+            this.labelMessageForeground.Text = "Calculating jumps...";
             // 
             // groupBox1
             // 
@@ -335,6 +349,7 @@
             this.radioButtonDisable.TabStop = true;
             this.radioButtonDisable.Text = "Disable";
             this.radioButtonDisable.UseVisualStyleBackColor = true;
+            this.radioButtonDisable.Click += new System.EventHandler(this.RadioDisableRoute);
             // 
             // radioButtonUseUser
             // 
@@ -343,8 +358,10 @@
             this.radioButtonUseUser.Name = "radioButtonUseUser";
             this.radioButtonUseUser.Size = new System.Drawing.Size(48, 19);
             this.radioButtonUseUser.TabIndex = 7;
+            this.radioButtonUseUser.Tag = "User";
             this.radioButtonUseUser.Text = "User";
             this.radioButtonUseUser.UseVisualStyleBackColor = true;
+            this.radioButtonUseUser.Click += new System.EventHandler(this.RadioSetRouteMode);
             // 
             // radioButtonUseClient
             // 
@@ -353,8 +370,10 @@
             this.radioButtonUseClient.Name = "radioButtonUseClient";
             this.radioButtonUseClient.Size = new System.Drawing.Size(56, 19);
             this.radioButtonUseClient.TabIndex = 6;
+            this.radioButtonUseClient.Tag = "Client";
             this.radioButtonUseClient.Text = "Client";
             this.radioButtonUseClient.UseVisualStyleBackColor = true;
+            this.radioButtonUseClient.Click += new System.EventHandler(this.RadioSetRouteMode);
             // 
             // listView1
             // 
@@ -369,7 +388,7 @@
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listView1.Location = new System.Drawing.Point(6, 70);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(385, 289);
+            this.listView1.Size = new System.Drawing.Size(385, 322);
             this.listView1.TabIndex = 4;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -426,7 +445,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(627, 404);
+            this.ClientSize = new System.Drawing.Size(627, 433);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBoxSpansh);
             this.Controls.Add(this.groupBoxRatInfo);
@@ -441,8 +460,8 @@
             this.groupBoxRatInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJumpRange)).EndInit();
             this.groupBoxSpansh.ResumeLayout(false);
-            this.groupBoxSpansh.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panelMessageBackground.ResumeLayout(false);
+            this.panelMessageBackground.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -463,7 +482,7 @@
         private TextBox textBoxPlatform;
         private CheckBox checkBoxCodeRed;
         private Label label4;
-        private TextBox textBoxSystemName;
+        private TextBox textBoxClientSystemName;
         private GroupBox groupBoxCaseInfo;
         private GroupBox groupBoxRatInfo;
         private Button buttonClearCase;
@@ -473,7 +492,7 @@
         private Label label6;
         private Label label5;
         private TextBox textBoxCurrentSystem;
-        private Button buttonSetTarget;
+        private Button buttonSetUserSystem;
         private GroupBox groupBoxSpansh;
         private GroupBox groupBox1;
         private RadioButton radioButtonDisable;
@@ -485,10 +504,11 @@
         private ColumnHeader columnHeaderLeft;
         private ColumnHeader columnHeaderJumps;
         private ColumnHeader columnHeaderNeutron;
-        private Label label8;
-        private PictureBox pictureBox1;
+        private Label labelMessageForeground;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem toolStripMenuItemSettings;
         private ToolStripMenuItem toolStripMenuItemTopMost;
+        private Panel panelMessageBackground;
+        private Button buttonSetClientTargetSystem;
     }
 }
