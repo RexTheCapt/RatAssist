@@ -1,10 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace EDNeutronRouterPlugin
+namespace EDNeutronRouterPlugin.Exceptions
 {
     [Serializable]
-    internal class UnableToCallSpanshApiException : Exception
+    public class UnableToCallSpanshApiException : Exception
     {
         public UnableToCallSpanshApiException()
         {

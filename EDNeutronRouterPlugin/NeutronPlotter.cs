@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EDNeutronRouterPlugin.Exceptions;
+
+using Newtonsoft.Json.Linq;
 
 using RestSharp;
 

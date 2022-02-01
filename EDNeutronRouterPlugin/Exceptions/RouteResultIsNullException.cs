@@ -1,10 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace EDNeutronRouterPlugin
+namespace EDNeutronRouterPlugin.Exceptions
 {
     [Serializable]
-    internal class RouteResultIsNullException : Exception
+    public class RouteResultIsNullException : Exception
     {
         public RouteResultIsNullException()
         {
