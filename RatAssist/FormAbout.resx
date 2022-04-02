@@ -57,13 +57,47 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>172, 17</value>
-  </metadata>
-  <metadata name="timerUpdateQuickSelect.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>287, 17</value>
-  </metadata>
-  <metadata name="timerFuelAlert.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>471, 17</value>
-  </metadata>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>Rat Spansh Tool
+Scroll down for usages!
+
+An Unofficial Tool by RexTheCapt ( https://github.com/RexTheCapt )
+Logo mashed together by ShiftTGC ( https://www.youtube.com/ShiftTGC )
+
+
+This Program requires an internet connection to work.
+
+Takes use of Gareth Harper’s Neutron Router found here:
+https://spansh.co.uk/plotter
+
+You are not required to be a Fuel Rat to take use of this program
+But if you want to help and become a Fuel Rat, you are more than welcome to!
+https://fuelrats.com/register
+
+Spansh API taken from https://github.com/pulganosaure/ED-NeutronRouter/tree/888c16dc527e66cd770766151512bc8395bd9213
+
+Usages:
+Double click an system in the list to copy the system name, The highlighed system on update is already copied to your clipboard.
+
+In game commands (these message get sent into current chat channel):
+RANGE:
+    Usage: RANGE &lt;number&gt;
+    Info: Lets you set jump range.
+
+DEST:
+DESTINATION:
+TARGETSYSTEM:
+TARGET:
+SYSTEM:
+    Usage: &lt;cmd&gt; &lt;system name&gt;
+    Info: Change the target system.
+
+UPDATE:
+    Usage: UPDATE
+    Info: Forces the program to update the route.
+
+TOP:
+    Usage: TOP
+    Info: Makes the program stay on top of everything, or disables this function.</value>
+  </data>
 </root>

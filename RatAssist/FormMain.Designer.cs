@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.textBoxClientName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,7 +42,8 @@
             this.groupBoxCaseInfo = new System.Windows.Forms.GroupBox();
             this.buttonSetClientTargetSystem = new System.Windows.Forms.Button();
             this.buttonClearCase = new System.Windows.Forms.Button();
-            this.groupBoxRatInfo = new System.Windows.Forms.GroupBox();
+            this.groupBoxUserInfo = new System.Windows.Forms.GroupBox();
+            this.panelFuelLevelBackground = new System.Windows.Forms.Panel();
             this.buttonSetUserSystem = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.textBoxTargetSystem = new System.Windows.Forms.TextBox();
@@ -52,11 +54,11 @@
             this.groupBoxSpansh = new System.Windows.Forms.GroupBox();
             this.panelMessageBackground = new System.Windows.Forms.Panel();
             this.labelMessageForeground = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxRouteMode = new System.Windows.Forms.GroupBox();
             this.radioButtonDisable = new System.Windows.Forms.RadioButton();
             this.radioButtonUseUser = new System.Windows.Forms.RadioButton();
             this.radioButtonUseClient = new System.Windows.Forms.RadioButton();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewJumpList = new System.Windows.Forms.ListView();
             this.columnHeaderSystem = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderJumped = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderLeft = new System.Windows.Forms.ColumnHeader();
@@ -65,13 +67,19 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItemSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTopMost = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleRatModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quickSelectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eDITToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerUpdateQuickSelect = new System.Windows.Forms.Timer(this.components);
+            this.timerFuelAlert = new System.Windows.Forms.Timer(this.components);
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCaseNR)).BeginInit();
             this.groupBoxCaseInfo.SuspendLayout();
-            this.groupBoxRatInfo.SuspendLayout();
+            this.groupBoxUserInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJumpRange)).BeginInit();
             this.groupBoxSpansh.SuspendLayout();
             this.panelMessageBackground.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxRouteMode.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -202,26 +210,40 @@
             this.buttonClearCase.UseVisualStyleBackColor = true;
             this.buttonClearCase.Click += new System.EventHandler(this.ButtonClearCase_Click);
             // 
-            // groupBoxRatInfo
+            // groupBoxUserInfo
             // 
-            this.groupBoxRatInfo.BackColor = System.Drawing.Color.Gray;
-            this.groupBoxRatInfo.Controls.Add(this.buttonSetUserSystem);
-            this.groupBoxRatInfo.Controls.Add(this.label7);
-            this.groupBoxRatInfo.Controls.Add(this.textBoxTargetSystem);
-            this.groupBoxRatInfo.Controls.Add(this.numericUpDownJumpRange);
-            this.groupBoxRatInfo.Controls.Add(this.label6);
-            this.groupBoxRatInfo.Controls.Add(this.label5);
-            this.groupBoxRatInfo.Controls.Add(this.textBoxCurrentSystem);
-            this.groupBoxRatInfo.Location = new System.Drawing.Point(5, 235);
-            this.groupBoxRatInfo.Name = "groupBoxRatInfo";
-            this.groupBoxRatInfo.Size = new System.Drawing.Size(216, 112);
-            this.groupBoxRatInfo.TabIndex = 11;
-            this.groupBoxRatInfo.TabStop = false;
-            this.groupBoxRatInfo.Text = "User info";
+            this.groupBoxUserInfo.BackColor = System.Drawing.Color.Gray;
+            this.groupBoxUserInfo.Controls.Add(this.panelFuelLevelBackground);
+            this.groupBoxUserInfo.Controls.Add(this.buttonSetUserSystem);
+            this.groupBoxUserInfo.Controls.Add(this.label7);
+            this.groupBoxUserInfo.Controls.Add(this.textBoxTargetSystem);
+            this.groupBoxUserInfo.Controls.Add(this.numericUpDownJumpRange);
+            this.groupBoxUserInfo.Controls.Add(this.label6);
+            this.groupBoxUserInfo.Controls.Add(this.label5);
+            this.groupBoxUserInfo.Controls.Add(this.textBoxCurrentSystem);
+            this.groupBoxUserInfo.Location = new System.Drawing.Point(5, 235);
+            this.groupBoxUserInfo.Name = "groupBoxUserInfo";
+            this.groupBoxUserInfo.Size = new System.Drawing.Size(216, 123);
+            this.groupBoxUserInfo.TabIndex = 11;
+            this.groupBoxUserInfo.TabStop = false;
+            this.groupBoxUserInfo.Text = "User info";
+            // 
+            // panelFuelLevelBackground
+            // 
+            this.panelFuelLevelBackground.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelFuelLevelBackground.BackColor = System.Drawing.Color.IndianRed;
+            this.panelFuelLevelBackground.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.panelFuelLevelBackground.Location = new System.Drawing.Point(3, 84);
+            this.panelFuelLevelBackground.Name = "panelFuelLevelBackground";
+            this.panelFuelLevelBackground.Size = new System.Drawing.Size(211, 10);
+            this.panelFuelLevelBackground.TabIndex = 14;
             // 
             // buttonSetUserSystem
             // 
-            this.buttonSetUserSystem.Location = new System.Drawing.Point(6, 84);
+            this.buttonSetUserSystem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSetUserSystem.Location = new System.Drawing.Point(7, 94);
             this.buttonSetUserSystem.Name = "buttonSetUserSystem";
             this.buttonSetUserSystem.Size = new System.Drawing.Size(200, 23);
             this.buttonSetUserSystem.TabIndex = 12;
@@ -240,6 +262,8 @@
             // 
             // textBoxTargetSystem
             // 
+            this.textBoxTargetSystem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxTargetSystem.Location = new System.Drawing.Point(93, 61);
             this.textBoxTargetSystem.Name = "textBoxTargetSystem";
             this.textBoxTargetSystem.Size = new System.Drawing.Size(113, 23);
@@ -247,6 +271,8 @@
             // 
             // numericUpDownJumpRange
             // 
+            this.numericUpDownJumpRange.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownJumpRange.DecimalPlaces = 2;
             this.numericUpDownJumpRange.Location = new System.Drawing.Point(94, 38);
             this.numericUpDownJumpRange.Maximum = new decimal(new int[] {
@@ -288,6 +314,8 @@
             // 
             // textBoxCurrentSystem
             // 
+            this.textBoxCurrentSystem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxCurrentSystem.Location = new System.Drawing.Point(93, 15);
             this.textBoxCurrentSystem.Name = "textBoxCurrentSystem";
             this.textBoxCurrentSystem.ReadOnly = true;
@@ -299,11 +327,11 @@
             // 
             this.groupBoxSpansh.BackColor = System.Drawing.Color.Gray;
             this.groupBoxSpansh.Controls.Add(this.panelMessageBackground);
-            this.groupBoxSpansh.Controls.Add(this.groupBox1);
-            this.groupBoxSpansh.Controls.Add(this.listView1);
+            this.groupBoxSpansh.Controls.Add(this.groupBoxRouteMode);
+            this.groupBoxSpansh.Controls.Add(this.listViewJumpList);
             this.groupBoxSpansh.Location = new System.Drawing.Point(227, 30);
             this.groupBoxSpansh.Name = "groupBoxSpansh";
-            this.groupBoxSpansh.Size = new System.Drawing.Size(397, 317);
+            this.groupBoxSpansh.Size = new System.Drawing.Size(378, 328);
             this.groupBoxSpansh.TabIndex = 12;
             this.groupBoxSpansh.TabStop = false;
             this.groupBoxSpansh.Text = "Spansh";
@@ -314,7 +342,7 @@
             this.panelMessageBackground.Controls.Add(this.labelMessageForeground);
             this.panelMessageBackground.Location = new System.Drawing.Point(6, 269);
             this.panelMessageBackground.Name = "panelMessageBackground";
-            this.panelMessageBackground.Size = new System.Drawing.Size(385, 29);
+            this.panelMessageBackground.Size = new System.Drawing.Size(364, 29);
             this.panelMessageBackground.TabIndex = 15;
             // 
             // labelMessageForeground
@@ -326,17 +354,17 @@
             this.labelMessageForeground.TabIndex = 10;
             this.labelMessageForeground.Text = "Calculating jumps...";
             // 
-            // groupBox1
+            // groupBoxRouteMode
             // 
-            this.groupBox1.Controls.Add(this.radioButtonDisable);
-            this.groupBox1.Controls.Add(this.radioButtonUseUser);
-            this.groupBox1.Controls.Add(this.radioButtonUseClient);
-            this.groupBox1.Location = new System.Drawing.Point(6, 16);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(385, 48);
-            this.groupBox1.TabIndex = 8;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Route to:";
+            this.groupBoxRouteMode.Controls.Add(this.radioButtonDisable);
+            this.groupBoxRouteMode.Controls.Add(this.radioButtonUseUser);
+            this.groupBoxRouteMode.Controls.Add(this.radioButtonUseClient);
+            this.groupBoxRouteMode.Location = new System.Drawing.Point(6, 16);
+            this.groupBoxRouteMode.Name = "groupBoxRouteMode";
+            this.groupBoxRouteMode.Size = new System.Drawing.Size(364, 48);
+            this.groupBoxRouteMode.TabIndex = 8;
+            this.groupBoxRouteMode.TabStop = false;
+            this.groupBoxRouteMode.Text = "Route to:";
             // 
             // radioButtonDisable
             // 
@@ -375,23 +403,23 @@
             this.radioButtonUseClient.UseVisualStyleBackColor = true;
             this.radioButtonUseClient.Click += new System.EventHandler(this.RadioSetRouteMode);
             // 
-            // listView1
+            // listViewJumpList
             // 
-            this.listView1.BackColor = System.Drawing.Color.Silver;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewJumpList.BackColor = System.Drawing.Color.Silver;
+            this.listViewJumpList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderSystem,
             this.columnHeaderJumped,
             this.columnHeaderLeft,
             this.columnHeaderJumps,
             this.columnHeaderNeutron});
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.listView1.Location = new System.Drawing.Point(6, 70);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(385, 241);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listViewJumpList.FullRowSelect = true;
+            this.listViewJumpList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.listViewJumpList.Location = new System.Drawing.Point(6, 70);
+            this.listViewJumpList.Name = "listViewJumpList";
+            this.listViewJumpList.Size = new System.Drawing.Size(364, 252);
+            this.listViewJumpList.TabIndex = 4;
+            this.listViewJumpList.UseCompatibleStateImageBehavior = false;
+            this.listViewJumpList.View = System.Windows.Forms.View.Details;
             // 
             // columnHeaderSystem
             // 
@@ -418,7 +446,10 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemSettings});
+            this.toolStripMenuItemSettings,
+            this.toggleRatModeToolStripMenuItem,
+            this.quickSelectToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(627, 24);
@@ -440,15 +471,55 @@
             this.toolStripMenuItemTopMost.Text = "Top most";
             this.toolStripMenuItemTopMost.Click += new System.EventHandler(this.TopMost_CheckedChanged);
             // 
+            // toggleRatModeToolStripMenuItem
+            // 
+            this.toggleRatModeToolStripMenuItem.Name = "toggleRatModeToolStripMenuItem";
+            this.toggleRatModeToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
+            this.toggleRatModeToolStripMenuItem.Text = "ToggleRatMode";
+            this.toggleRatModeToolStripMenuItem.Click += new System.EventHandler(this.toggleRatModeToolStripMenuItem_Click);
+            // 
+            // quickSelectToolStripMenuItem
+            // 
+            this.quickSelectToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.eDITToolStripMenuItem});
+            this.quickSelectToolStripMenuItem.Name = "quickSelectToolStripMenuItem";
+            this.quickSelectToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.quickSelectToolStripMenuItem.Text = "QuickSelect";
+            // 
+            // eDITToolStripMenuItem
+            // 
+            this.eDITToolStripMenuItem.Name = "eDITToolStripMenuItem";
+            this.eDITToolStripMenuItem.Size = new System.Drawing.Size(105, 22);
+            this.eDITToolStripMenuItem.Text = "[EDIT]";
+            this.eDITToolStripMenuItem.Click += new System.EventHandler(this.eDITToolStripMenuItem_Click);
+            // 
+            // timerUpdateQuickSelect
+            // 
+            this.timerUpdateQuickSelect.Enabled = true;
+            this.timerUpdateQuickSelect.Interval = 10000;
+            this.timerUpdateQuickSelect.Tick += new System.EventHandler(this.timerUpdateQuickSelect_Tick);
+            // 
+            // timerFuelAlert
+            // 
+            this.timerFuelAlert.Interval = 1000;
+            this.timerFuelAlert.Tick += new System.EventHandler(this.timerFuelAlert_Tick);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(627, 352);
+            this.ClientSize = new System.Drawing.Size(627, 444);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBoxSpansh);
-            this.Controls.Add(this.groupBoxRatInfo);
+            this.Controls.Add(this.groupBoxUserInfo);
             this.Controls.Add(this.groupBoxCaseInfo);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
@@ -456,14 +527,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCaseNR)).EndInit();
             this.groupBoxCaseInfo.ResumeLayout(false);
             this.groupBoxCaseInfo.PerformLayout();
-            this.groupBoxRatInfo.ResumeLayout(false);
-            this.groupBoxRatInfo.PerformLayout();
+            this.groupBoxUserInfo.ResumeLayout(false);
+            this.groupBoxUserInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownJumpRange)).EndInit();
             this.groupBoxSpansh.ResumeLayout(false);
             this.panelMessageBackground.ResumeLayout(false);
             this.panelMessageBackground.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxRouteMode.ResumeLayout(false);
+            this.groupBoxRouteMode.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -484,7 +555,7 @@
         private Label label4;
         private TextBox textBoxClientSystemName;
         private GroupBox groupBoxCaseInfo;
-        private GroupBox groupBoxRatInfo;
+        private GroupBox groupBoxUserInfo;
         private Button buttonClearCase;
         private Label label7;
         private TextBox textBoxTargetSystem;
@@ -494,11 +565,11 @@
         private TextBox textBoxCurrentSystem;
         private Button buttonSetUserSystem;
         private GroupBox groupBoxSpansh;
-        private GroupBox groupBox1;
+        private GroupBox groupBoxRouteMode;
         private RadioButton radioButtonDisable;
         private RadioButton radioButtonUseUser;
         private RadioButton radioButtonUseClient;
-        private ListView listView1;
+        private ListView listViewJumpList;
         private ColumnHeader columnHeaderSystem;
         private ColumnHeader columnHeaderJumped;
         private ColumnHeader columnHeaderLeft;
@@ -510,5 +581,12 @@
         private ToolStripMenuItem toolStripMenuItemTopMost;
         private Panel panelMessageBackground;
         private Button buttonSetClientTargetSystem;
+        private ToolStripMenuItem toggleRatModeToolStripMenuItem;
+        private ToolStripMenuItem quickSelectToolStripMenuItem;
+        private ToolStripMenuItem eDITToolStripMenuItem;
+        private System.Windows.Forms.Timer timerUpdateQuickSelect;
+        private Panel panelFuelLevelBackground;
+        private System.Windows.Forms.Timer timerFuelAlert;
+        private ToolStripMenuItem aboutToolStripMenuItem;
     }
 }

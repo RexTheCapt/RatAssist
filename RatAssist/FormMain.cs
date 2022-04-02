@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 using EDNeutronRouterPlugin;
 using EDNeutronRouterPlugin.Exceptions;
 
@@ -14,10 +16,43 @@ namespace RatAssist
         public static readonly string JournalPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}\\Saved Games\\Frontier Developments\\Elite Dangerous";
         private readonly System.Windows.Forms.Timer delayedUpdate;
         private readonly System.Windows.Forms.Timer scanJournal;
+        private bool RatMode
+        {
+            get
+            {
+                if (!File.Exists("ratmode"))
+                    return false;
+                using (StreamReader sr = new("ratmode"))
+                    return sr.ReadLine().Equals("yes");
+            }
+            set
+            {
+                using (StreamWriter sw = new("ratmode"))
+                    sw.WriteLine(value? "yes" : "no");
+            }
+        }
+        private List<ToolStripMenuItem> quickSelectItems = new();
+        private DateTime quickSelectTimestamp = DateTime.MinValue;
+        private decimal fuelMax;
+        private decimal fuelLevel;
+        private Panel panelFuelLevelForeground;
 
         public FormMain()
         {
             InitializeComponent();
+
+            this.Icon = Properties.Resources.Rat_Spansh_Tool1;
+
+            SetRatMode(RatMode);
+            #region Make fuel foreground control
+            Panel p = new Panel();
+            p.Location = panelFuelLevelBackground.Location;
+            p.Size = panelFuelLevelBackground.Size;
+            p.BackColor = Color.Green;
+            groupBoxUserInfo.Controls.Add(p);
+            panelFuelLevelForeground = p;
+            p.BringToFront();
+            #endregion
 
             mjc = new()
             {
@@ -58,6 +93,10 @@ namespace RatAssist
             JournalScanner.CarrierJumpHandler += JournalScanner_CarrierJumpHandler;
             JournalScanner.SendTextHandler += JournalScanner_SendTextHandler;
             JournalScanner.LoadoutHandler += JournalScanner_LoadoutHandler;
+            JournalScanner.LoadGameHandler += JournalScanner_LoadGameHandler;
+            JournalScanner.RefuelAllHandler += JournalScanner_RefuelAllHandler;
+            JournalScanner.ReservoirReplenishedHandler += JournalScanner_ReservoirReplenishedHandler;
+            JournalScanner.FuelScoopHandler += JournalScanner_FuelScoopHandler;
             #endregion
 
             scanJournal = new()
@@ -68,6 +107,102 @@ namespace RatAssist
             scanJournal.Tick += ScanJournal_Tick;
 
             mjc.Hide();
+        }
+
+        private void JournalScanner_FuelScoopHandler(object? sender, EventArgs e)
+        {
+            /*
+             * timestamp
+             * event
+             * Scooped
+             * Total
+             */
+            JournalScanner.FuelScoopEventArgs eArgs = (JournalScanner.FuelScoopEventArgs)e;
+            JObject fuelScoop = eArgs.FuelScoop;
+
+            fuelLevel = fuelScoop.Value<decimal>("Total");
+
+            FuelAlert();
+        }
+
+        private void JournalScanner_ReservoirReplenishedHandler(object? sender, EventArgs e)
+        {
+            /*
+             * timestamp
+             * event
+             * FuelMain
+             * FuelReservoir
+             */
+            JournalScanner.ReservoirReplenishedEventArgs eArgs = (JournalScanner.ReservoirReplenishedEventArgs)e;
+            JObject reservoirReplenished = eArgs.ReservoirReplenished;
+
+            fuelLevel = reservoirReplenished.Value<decimal>("FuelMain");
+
+            FuelAlert();
+        }
+
+        private void FuelAlert()
+        {
+            if (fuelLevel == 0 || fuelMax == 0) return;
+
+            decimal prcnt = (fuelLevel / fuelMax);
+
+            int width = panelFuelLevelBackground.Width;
+            panelFuelLevelForeground.Width = (int)((decimal)width * prcnt);
+
+            if (prcnt * 100 < 25)
+                timerFuelAlert.Enabled = true;
+            else if (timerFuelAlert.Enabled)
+            {
+                timerFuelAlert.Enabled = false;
+                panelMessageBackground.Visible = false;
+                panelMessageBackground.Click += null;
+                labelMessageForeground.Click += null;
+            }
+        }
+
+        private void JournalScanner_RefuelAllHandler(object? sender, EventArgs e)
+        {
+            /*
+             * RefuelAll
+             * Cost
+             * Amount
+             */
+            JournalScanner.RefuelAllEventArgs eArgs = (JournalScanner.RefuelAllEventArgs)e;
+            JObject refuelAll = eArgs.RefuelAll;
+
+            fuelLevel += refuelAll.Value<decimal>("Amount");
+
+            FuelAlert();
+        }
+
+        private void JournalScanner_LoadGameHandler(object? sender, EventArgs e)
+        {
+            /*
+             * timestamp
+             * event
+             * FID
+             * Commander
+             * Horizons
+             * Ship
+             * Ship_Localised
+             * ShipID
+             * ShipName
+             * ShipIdent
+             * FuelLevel
+             * FuelCapacity
+             * GameMode
+             * Credits
+             * Loan
+             */
+            JournalScanner.LoadGameEventArgs eArgs = (JournalScanner.LoadGameEventArgs)e;
+
+            JObject loadGame = eArgs.LoadGame;
+
+            fuelMax = loadGame.Value<decimal>("FuelCapacity");
+            fuelLevel = loadGame.Value<decimal>("FuelLevel");
+
+            FuelAlert();
         }
 
         private void ScanJournal_Tick(object? sender, EventArgs e)
@@ -114,15 +249,23 @@ namespace RatAssist
             {
                 splits = Clipboard.GetText().Replace(" - ", "|").Split('|');
 
-                textBoxClientName.Text = splits[0].Split(':')[1].Trim();
-                textBoxClientSystemName.Text = splits[1].Split(':')[1].Trim();
-                textBoxPlatform.Text = splits[2].Split(':')[1].Trim();
-                checkBoxCodeRed.Checked = splits[3].Split(':')[1].Trim().Equals("NOT OK");
-                string language = splits[4].Split(':')[1].Trim();
-                string ircNick;
+                try
+                {
+                    textBoxClientName.Text = splits[0].Split(':')[1].Trim();
+                    textBoxClientSystemName.Text = splits[1].Split(':')[1].Trim();
+                    textBoxPlatform.Text = splits[2].Split(':')[1].Trim();
+                    checkBoxCodeRed.Checked = splits[3].Split(':')[1].Trim().Equals("NOT OK");
+                    string language = splits[4].Split(':')[1].Trim();
+                    string ircNick;
 
-                if (splits.Length > 5)
-                    ircNick = splits[5].Split(':')[1].Trim();
+                    if (splits.Length > 5)
+                        ircNick = splits[5].Split(':')[1].Trim();
+                }
+                catch
+                {
+                    ButtonClearCase_Click(this, null);
+                    return;
+                }
             }
 
             ButtonSetClientTargetSystem(sender, e);
@@ -133,8 +276,9 @@ namespace RatAssist
             textBoxClientSystemName.Text = "";
             textBoxClientName.Text = "";
             textBoxPlatform.Text = "";
-            numericUpDownCaseNR.Value = -1;
+            numericUpDownCaseNR.Value = 0;
             checkBoxCodeRed.Checked = false;
+            radioButtonDisable.Checked = true;
         }
 
         private void CheckBoxCodeRed_CheckedChanged(object sender, EventArgs e)
@@ -144,7 +288,30 @@ namespace RatAssist
 
         private void JournalScanner_LoadoutHandler(object? sender, EventArgs e)
         {
+            /*
+             * timestamp
+             * event
+             * Ship
+             * ShipID
+             * ShipName
+             * ShipIdent
+             * HullValue
+             * ModulesValue
+             * HullHealth
+             * UnladenMass
+             * CargoCapacity
+             * MaxJumpRange
+             * FuelCapacity
+             * Rebuy
+             * Modules
+             */
+
             JournalScanner.LoadoutEventArgs eArgs = (JournalScanner.LoadoutEventArgs)e;
+
+            JObject? jObject = eArgs.Loadout.Value<JObject>("FuelCapacity");
+            fuelMax = jObject.Value<decimal>("Main");
+
+            FuelAlert();
         }
 
         private void JournalScanner_SendTextHandler(object? sender, EventArgs e)
@@ -206,9 +373,9 @@ namespace RatAssist
 
         private void ListView1_DoubleClick(object? sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 1)
+            if (listViewJumpList.SelectedItems.Count == 1)
             {
-                ListViewItem listViewItem = listView1.SelectedItems[0];
+                ListViewItem listViewItem = listViewJumpList.SelectedItems[0];
                 JObject tag = (JObject)listViewItem.Tag;
                 Clipboard.SetText(tag.Value<string>("system"));
             }
@@ -240,15 +407,9 @@ namespace RatAssist
 
         private void JournalScanner_CarrierJumpHandler(object? sender, EventArgs e)
         {
-            if (e is JournalScanner.CarrierJumpEventArgs)
-            {
-                JObject j = ((JournalScanner.CarrierJumpEventArgs)e).CarrierJump;
-
-                if (j != null)
-                {
-                    textBoxCurrentSystem.Text = j.Value<string>("StarSystem") ?? "[UNKNOWN]";
-                }
-            }
+            JournalScanner.CarrierJumpEventArgs eArgs = (JournalScanner.CarrierJumpEventArgs)e;
+            JObject carrierJump = eArgs.CarrierJump;
+            textBoxCurrentSystem.Text = carrierJump.Value<string>("StarSystem") ?? "[UNKNOWN]";
         }
 
         private void JournalScanner_StoredModulesHandler(object? sender, EventArgs e)
@@ -579,8 +740,11 @@ namespace RatAssist
                      * FuelLevel
                      */
                     textBoxCurrentSystem.Text = j.Value<string>("StarSystem") ?? "[UNKNOWN]";
+                    fuelLevel = j.Value<decimal>("FuelLevel");
                 }
             }
+
+            FuelAlert();
         }
 
         private void JournalScanner_ScanHandler(object? sender, EventArgs e)
@@ -675,7 +839,7 @@ namespace RatAssist
                     throw;
             }
 
-            listView1.Items.Clear();
+            listViewJumpList.Items.Clear();
             bool skipFirst = true;
             bool nextRouteCopied = false;
             uint totalJumps = 0;
@@ -715,7 +879,7 @@ namespace RatAssist
                 //    copySecond = false;
                 //}
 
-                ListViewItem listViewItem = listView1.Items.Add(lvi);
+                ListViewItem listViewItem = listViewJumpList.Items.Add(lvi);
                 listViewItem.Tag = j;
             }
             this.Text = $"Route Plotter | {totalJumps} jumps left";
@@ -796,7 +960,7 @@ namespace RatAssist
                     return;
             }
 
-            listView1.Items.Clear();
+            listViewJumpList.Items.Clear();
             bool skipFirst = true;
             bool nextRouteCopied = false;
             uint totalJumps = 0;
@@ -839,7 +1003,7 @@ namespace RatAssist
                 //    copySecond = false;
                 //}
 
-                ListViewItem listViewItem = listView1.Items.Add(lvi);
+                ListViewItem listViewItem = listViewJumpList.Items.Add(lvi);
                 listViewItem.Tag = j;
             }
             mjc.Hide();
@@ -860,6 +1024,133 @@ namespace RatAssist
         {
             radioButtonUseClient.Checked = true;
             RadioSetRouteMode(radioButtonUseClient, new EventArgs());
+        }
+
+        private void toggleRatModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RatMode = !RatMode;
+            SetRatMode(RatMode);
+        }
+
+        private void SetRatMode(bool rm)
+        {
+            if (rm)
+                radioButtonDisable.Checked = true;
+            else
+                radioButtonUseUser.Checked = true;
+
+            groupBoxCaseInfo.Visible = rm;
+            groupBoxRouteMode.Visible = rm;
+
+            groupBoxUserInfo.Location = rm ? new(5, 235) : new(5, 30);
+            groupBoxUserInfo.Width = rm ? 216 : groupBoxSpansh.Width;
+
+            listViewJumpList.Location = rm ? new(5, 70) : new(5, 16);
+            listViewJumpList.Height = rm ? 252 : 150;
+            groupBoxSpansh.Height = rm ? listViewJumpList.Height + listViewJumpList.Location.Y + 6 : listViewJumpList.Height + listViewJumpList.Location.Y + 5;
+            groupBoxSpansh.Location = rm ? new(227, 30) : new(5, groupBoxUserInfo.Height + 5 + groupBoxUserInfo.Location.Y);
+            panelMessageBackground.Location = new(5, listViewJumpList.Location.Y + listViewJumpList.Height - panelMessageBackground.Height - 10);
+            //panelMessageBackground.Location = rm ? new(5, 269) : new Point(5, 269 - 54);
+
+            this.Size = new Size(groupBoxSpansh.Location.X + groupBoxSpansh.Width + 20, groupBoxSpansh.Location.Y + groupBoxSpansh.Height + 45);
+
+            FuelAlert();
+        }
+
+        private void eDITToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string qsf = "quickselect.txt";
+            if (!File.Exists(qsf))
+                using (StreamWriter sw = new(qsf))
+                    sw.WriteLine("# Please write a single star system per line\n" +
+                                 "# use # to comment out lines.\n" +
+                                 "# Keep in mind it can take about 10 seconds to update the quick select list.");
+
+            Process.Start("notepad.exe", Path.GetFullPath(qsf));
+        }
+
+        private void timerUpdateQuickSelect_Tick(object sender, EventArgs e)
+        {
+            string qsf = "quickselect.txt";
+            DateTime lastWriteTime = (new FileInfo(qsf)).LastWriteTime;
+
+            if (File.Exists(qsf) && lastWriteTime > quickSelectTimestamp)
+            {
+                for (int i = quickSelectItems.Count - 1; i >= 0; i--)
+                {
+                    ToolStripMenuItem sys = quickSelectItems[i];
+                    quickSelectItems.Remove(sys);
+                    sys.Dispose();
+                }
+
+                quickSelectItems.Clear();
+
+                using (StreamReader sr = new(qsf))
+                    while (!sr.EndOfStream)
+                    {
+                        string? line = sr.ReadLine();
+                        if (line == null) continue;
+                        if (line.StartsWith("#")) continue;
+                        if (line.Length == 0) continue;
+
+                        ToolStripMenuItem mi = new ToolStripMenuItem();
+                        mi.Text = line;
+                        mi.Click += QuickTarget;
+                        quickSelectItems.Add(mi);
+                        quickSelectToolStripMenuItem.DropDownItems.Add(mi);
+                    }
+
+                quickSelectTimestamp = lastWriteTime;
+            }
+        }
+
+        private void QuickTarget(object? sender, EventArgs e)
+        {
+            if (sender == null) return;
+            ToolStripMenuItem? mi = (ToolStripMenuItem)sender;
+            
+            if (mi == null) return;
+
+            textBoxTargetSystem.Text = mi.Text;
+            radioButtonUseUser.Checked = true;
+        }
+
+        private void timerFuelAlert_Tick(object sender, EventArgs e)
+        {
+            panelMessageBackground.Visible = true;
+            labelMessageForeground.Visible = true;
+
+            panelMessageBackground.BackColor = panelMessageBackground.BackColor == Color.Yellow ? Color.Black : Color.Yellow;
+
+            labelMessageForeground.BackColor = panelMessageBackground.BackColor == Color.Black ? Color.Black : Color.Yellow;
+            labelMessageForeground.ForeColor = panelMessageBackground.BackColor == Color.Yellow ? Color.Black : Color.Yellow;
+
+            labelMessageForeground.Text = "WARNING FUEL LEVEL LOW, CLICK ME TO CALL FUELRATS";
+
+            labelMessageForeground.Click += CallFuelRats;
+            panelMessageBackground.Click += CallFuelRats;
+
+            fuelratsOpened = false;
+        }
+
+        bool fuelratsOpened = false;
+        private void CallFuelRats(object? sender, EventArgs e)
+        {
+            if (fuelratsOpened) return;
+
+            var uri = "https://fuelrats.com";
+            var psi = new System.Diagnostics.ProcessStartInfo();
+            psi.UseShellExecute = true;
+            psi.FileName = uri;
+            System.Diagnostics.Process.Start(psi);
+
+            fuelratsOpened = true;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAbout about = new FormAbout();
+            about.Show();
         }
     }
 }
