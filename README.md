@@ -1,13 +1,13 @@
-#RatAssist
+#RatAssist  
 An ED neutron plotter made to help fuel rats with they're missions. Its not locked to only rats, everyone is able to use it!
 
-##How to use
+##How to use  
 I tried to make it as easy to use as possible.  
 When you start RatAssist, it will only show "User info" and "Spansh", click the button "ToggleRatMode" to change it into "Rat mode" (basically just gives you a few more options).  
 In rat mode, you get access to "Case info", "User info" and "Spansh" with extra routing settings.  
   
-###User mode
-####User info
+###User mode  
+####User info  
 The text field "Current sys" (read only) will be automatically updated as you go.  
 The number field "Jump range" is where you put in your current jump range (was not able to figure out how to do it automatically).  
 The text field "Target sys" is the system where you want to go.  
@@ -21,8 +21,8 @@ On each jump you do, it will automatically update as you go, so remembering wher
 The auto highlight logic will always take your jump range and multiply it by 4 (highest boost available), find the furthest system away from your current location within this travel distance, copy it to your keyboard. The system which is marked in green is the one that is copied to your clipboard by the program it self, double click to copy something else.  
 The message box should only show when there is an message to be shown to the user. It should notify you about errors, if its updating the list and show an fuel warning at 25% or less, click the fuel warning to open up [https://fuelrats.com/](fuelrats website).  
   
-###Rat mode
-####Case info
+###Rat mode  
+####Case info  
 The button "Set case" requires to have the entire ratsignal message in your clipboard on use, if not it will fail (might crash too).  
 When a case is set and the textbox "System name" is filled, it will automatically plot a route to the client and set the route mode to "Client".  
 The button "Clear case" removes all case info from the program, and it will disable routing at the same time.  
@@ -33,26 +33,26 @@ The number box "Case NR" (default 0) will show you your current case number.
 The checkbox "Code Red" is the client code red?  
 The button "Set target system" works exactly the same as the other button of same name, only it uses the case's system name and set the routing setting to client instead of user.  
   
-####User info
+####User info  
 Works exactly the same as "User mode".  
   
-####Spansh
+####Spansh  
 Works exactly the same as "User mode" but with an extra setting.  
 You can choose the routing mode "Disable", "User" and "Client".  
 Disable: Completely disables routing, will not auto update.  
 User: Use the "User"'s target system.  
 Client: Use the "Client"'s target system.  
   
-##Settings
+##Settings  
 Only a single setting so far, "Top most" which will make the program stay on top at all times.  
   
-##ToggleRatMode
+##ToggleRatMode  
 Toggles between "Normal" and "Rat" mode.  
   
-##QuickSelect
+##QuickSelect  
 Basically it is a list of "favorite" systems. At first its blank, but click the "[EDIT]" button to add/remove systems, please only a single system name per line, also ignores all lines which beghins with #.  
   
-##About
+##About  
 Opens an window with some info about this program (open as many as you want).  
 About content:
 ```
@@ -99,5 +99,5 @@ TOP:
     Info: Makes the program stay on top of everything, or disables this function.
 ```
   
-##The end note
+##The end note  
 If you have any suggestions, bug reports or whatever just add them in issues on the [https://github.com/RexTheCapt/RatAssist](github page) for RatAssist.
