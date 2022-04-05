@@ -1117,15 +1117,37 @@ namespace RatAssist
 
         private void timerFuelAlert_Tick(object sender, EventArgs e)
         {
+            decimal prcnt = fuelLevel / fuelMax * 100;
+            prcnt = .5M;
+
             panelMessageBackground.Visible = true;
             labelMessageForeground.Visible = true;
 
-            panelMessageBackground.BackColor = panelMessageBackground.BackColor == Color.Yellow ? Color.Black : Color.Yellow;
+            Color warningColor;
+            string warningMessage;
 
-            labelMessageForeground.BackColor = panelMessageBackground.BackColor == Color.Black ? Color.Black : Color.Yellow;
-            labelMessageForeground.ForeColor = panelMessageBackground.BackColor == Color.Yellow ? Color.Black : Color.Yellow;
+            if (prcnt < 1)
+            {
+                warningColor = Color.Red;
+                warningMessage = "RUNNING ON FUMES, please click this message!";
+            }
+            else if (prcnt < 5)
+            {
+                warningColor = Color.Red;
+                warningMessage = "FUEL IS CRITICAL, click this message for fuelrats is recommended!";
+            }
+            else
+            {
+                warningColor = Color.Yellow;
+                warningMessage = "Fuel level is low, click this message to call fuelrats";
+            }
 
-            labelMessageForeground.Text = "WARNING FUEL LEVEL LOW, CLICK ME TO CALL FUELRATS";
+            panelMessageBackground.BackColor = panelMessageBackground.BackColor == warningColor ? Color.Black : warningColor;
+
+            labelMessageForeground.BackColor = panelMessageBackground.BackColor == Color.Black ? Color.Black : warningColor;
+            labelMessageForeground.ForeColor = panelMessageBackground.BackColor == warningColor ? Color.Black : warningColor;
+
+            labelMessageForeground.Text = warningMessage;
 
             labelMessageForeground.Click += CallFuelRats;
             panelMessageBackground.Click += CallFuelRats;
