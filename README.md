@@ -65,7 +65,7 @@ Logo mashed together by ShiftTGC ( https://www.youtube.com/ShiftTGC )
 
 This Program requires an internet connection to work.
 
-Takes use of Gareth Harper’s Neutron Router found here:
+Takes use of Gareth Harperâ€™s Neutron Router found here:
 https://spansh.co.uk/plotter
 
 You are not required to be a Fuel Rat to take use of this program
@@ -100,4 +100,4 @@ TOP:
 ```
   
 ##The end note  
-If you have any suggestions, bug reports or whatever just add them in issues on the [https://github.com/RexTheCapt/RatAssist](github page) for RatAssist.
+If you have any suggestions, bug reports or whatever just add them in issues on the [https://github.com/RexTheCapt/RatAssist](github page) for RatAssist.  
